@@ -8,16 +8,20 @@
 </ion-header>
 
 <ion-content>
+  <button ion-button icon-left (click)="newCustomer()">
+  <ion-icon name="add"></ion-icon>
+  Novo Cliente
+</button>
   <ion-list>
-    <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
-      <ion-icon [name]="item.icon" item-left></ion-icon>
-      {{item.title}}
-      <div class="item-note" item-right>
+    <button ion-item *ngFor="let customer of customers" (click)="itemTapped($event, customer)">
+      <!--<ion-icon [name]="item.icon" item-left></ion-icon>-->
+      {{customer.name}}
+      <!--<div class="item-note" item-right>
         {{item.note}}
-      </div>
+      </div>-->
     </button>
   </ion-list>
-  <div *ngIf="selectedItem" padding>
-    You navigated here from <b>{{selectedItem.title}}</b>
-  </div>
+  <!--<div *ngIf="selectedItem" padding>
+    You navigated here from <b>{{selectedItem | json}}</b>
+  </div>-->
 </ion-content>
