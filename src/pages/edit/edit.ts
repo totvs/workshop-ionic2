@@ -37,18 +37,40 @@ export class EditPage {
   }
 
   delete() {
-    let that = this;
-    this.apiClient.deleteCustomer(this.customer.id).subscribe(
-      (res) => {
-        console.log('res: ', res);
-        that.showAlert('Excluído com sucesso!');
-      },
-      (err) => {
-        that.showErrorAlert(err);
-        // console.log('err: ', err);
-      }
-    )
+    this.showConfirm();
   }
+
+
+  showConfirm() {
+    var that = this;
+    let confirm = this.alertCtrl.create({
+      title: 'Exclusão',
+      message: 'Tem certeza que deseja excluir?',
+      buttons: [
+        {
+          text: 'Não',
+          handler: () => {
+            // console.log('Disagree clicked');
+          }
+        },
+        {
+          text: 'Sim',
+          handler: () => {
+            that.apiClient.deleteCustomer(that.customer.id).subscribe(
+              (res) => {
+                that.showAlert('Excluído com sucesso!');
+              },
+              (err) => {
+                that.showErrorAlert(err);
+              }
+            )
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
+
 
   showAlert(msg) {
     let alert = this.alertCtrl.create({
