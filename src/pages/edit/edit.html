@@ -25,6 +25,7 @@
 
   <div padding>
     <button ion-button color="primary" (click)="save();" block>Salvar</button>
+    <button *ngIf="customer.id" ion-button color="secondary" (click)="delete();" block>Excluir</button>
   </div>
 
 </ion-content>

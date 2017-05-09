@@ -3,7 +3,7 @@ import { EditPage } from './../edit/edit';
 import { Http, HttpModule } from '@angular/http';
 import { ApiClient } from './../../providers/api-client';
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, AlertController } from 'ionic-angular';
 
 @Component({
   selector: 'page-list',
@@ -16,13 +16,13 @@ export class ListPage {
   icons: string[];
   customers: Customer[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public apiClient: ApiClient) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public apiClient: ApiClient, public alertCtrl: AlertController) {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
 
     // Let's populate this page with some filler content for funzies
     this.icons = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
-    'american-football', 'boat', 'bluetooth', 'build'];
+      'american-football', 'boat', 'bluetooth', 'build'];
 
     // this.items = [];
     // for (let i = 1; i < 11; i++) {
@@ -32,18 +32,10 @@ export class ListPage {
     //     icon: this.icons[Math.floor(Math.random() * this.icons.length)]
     //   });
     // }
-    var that = this;
-    this.customers = [];
-    this.apiClient.getCustomers().subscribe(
-      (res) => {
-        // console.log('RES: ', res);
-        that.customers = res as Customer[];
-      },
-      (err) => {
-        console.log('Erro: ', err);
-      }
-    );
+  }
 
+  ionViewDidEnter() {
+    this.readCustomers();
   }
 
   itemTapped(event, customer) {
@@ -53,8 +45,40 @@ export class ListPage {
     });
   }
 
+  readCustomers() {
+    var that = this;
+    // this.customers = [];
+    this.apiClient.getCustomers().subscribe(
+      (res) => {
+        let customers = res as Customer[];
+        that.customers = customers.sort(
+          (a, b) => {
+            if (a.name > b.name)
+              return 1;
+            if (a.name > b.name)
+              return -1;
+            else
+              return 0;
+          }
+        );
+      },
+      (err) => {
+        that.showErrorAlert(err);
+      }
+    );
+  }
+
   newCustomer() {
     this.navCtrl.push(EditPage, {});
+  }
+
+  showErrorAlert(msg) {
+    let alert = this.alertCtrl.create({
+      title: 'Erro',
+      subTitle: 'Erro: ' + msg,
+      buttons: ['OK']
+    });
+    alert.present();
   }
 
 }

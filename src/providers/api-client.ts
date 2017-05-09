@@ -38,4 +38,9 @@ export class ApiClient {
     }
   }
 
+  deleteCustomer(id: string): Observable<any> {
+      console.log('DELETE REQUEST: ', AppConstants.API_URL + AppConstants.CUSTOMER_API + '/' + id);
+      return this.http.delete(AppConstants.API_URL + AppConstants.CUSTOMER_API + '/' + id);
+  }
+
 }
