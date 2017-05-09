@@ -22,7 +22,7 @@ export class ApiClient {
     return this.http.get(AppConstants.API_URL + AppConstants.CUSTOMER_API)
       .map(
       res => {
-        console.log('GET RESPONSE: ', res.json());
+        // console.log('GET RESPONSE: ', res);
         return res.json();
       }
       );
@@ -30,9 +30,11 @@ export class ApiClient {
 
   saveCustomer(customer: Customer): Observable<any> {
     if(customer.id) {
-      return this.http.post(AppConstants.API_URL + AppConstants.CUSTOMER_API, customer);
-    } else {
+      console.log('PUT REQUEST: ', AppConstants.API_URL + AppConstants.CUSTOMER_API + '/' + customer.id, customer);
       return this.http.put(AppConstants.API_URL + AppConstants.CUSTOMER_API + '/' + customer.id, customer);
+    } else {
+      console.log('POST REQUEST: ', AppConstants.API_URL + AppConstants.CUSTOMER_API, customer);
+      return this.http.post(AppConstants.API_URL + AppConstants.CUSTOMER_API, customer);
     }
   }
 
