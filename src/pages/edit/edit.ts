@@ -1,6 +1,6 @@
+import { ApiClient } from './../../providers/api-client/api-client';
 import { Customer } from './../../models/customer.model';
 import { Http, HttpModule } from '@angular/http';
-import { ApiClient } from './../../providers/api-client';
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, ViewController } from 'ionic-angular';
 
@@ -23,53 +23,53 @@ export class EditPage {
 
   save() {
     // console.log('item: ', this.customer);
-    let that = this;
-    this.apiClient.saveCustomer(this.customer).subscribe(
-      (res) => {
-        console.log('res: ', res);
-        that.showAlert('Dados salvos com sucesso!');
-      },
-      (err) => {
-        that.showErrorAlert(err);
-        // console.log('err: ', err);
-      }
-    )
+    // let that = this;
+    // this.apiClient.saveCustomer(this.customer).subscribe(
+    //   (res) => {
+    //     console.log('res: ', res);
+    //     that.showAlert('Dados salvos com sucesso!');
+    //   },
+    //   (err) => {
+    //     that.showErrorAlert(err);
+    //     // console.log('err: ', err);
+    //   }
+    // )
   }
 
   delete() {
-    this.showConfirm();
+    // this.showConfirm();
   }
 
 
-  showConfirm() {
-    var that = this;
-    let confirm = this.alertCtrl.create({
-      title: 'Exclusão',
-      message: 'Tem certeza que deseja excluir?',
-      buttons: [
-        {
-          text: 'Não',
-          handler: () => {
-            // console.log('Disagree clicked');
-          }
-        },
-        {
-          text: 'Sim',
-          handler: () => {
-            that.apiClient.deleteCustomer(that.customer.id).subscribe(
-              (res) => {
-                that.showAlert('Excluído com sucesso!');
-              },
-              (err) => {
-                that.showErrorAlert(err);
-              }
-            )
-          }
-        }
-      ]
-    });
-    confirm.present();
-  }
+  // showConfirm() {
+  //   var that = this;
+  //   let confirm = this.alertCtrl.create({
+  //     title: 'Exclusão',
+  //     message: 'Tem certeza que deseja excluir?',
+  //     buttons: [
+  //       {
+  //         text: 'Não',
+  //         handler: () => {
+  //           // console.log('Disagree clicked');
+  //         }
+  //       },
+  //       {
+  //         text: 'Sim',
+  //         handler: () => {
+  //           that.apiClient.deleteCustomer(that.customer.id).subscribe(
+  //             (res) => {
+  //               that.showAlert('Excluído com sucesso!');
+  //             },
+  //             (err) => {
+  //               that.showErrorAlert(err);
+  //             }
+  //           )
+  //         }
+  //       }
+  //     ]
+  //   });
+  //   confirm.present();
+  // }
 
 
   showAlert(msg) {

@@ -12,16 +12,11 @@
   <ion-icon name="add"></ion-icon>
   Novo Cliente
 </button>
+<ion-label color="dark">SERVER: {{status}}</ion-label>
+<ion-label color="dark">Fila: {{pending}}</ion-label>
   <ion-list>
     <button ion-item *ngFor="let customer of customers" (click)="itemTapped($event, customer)">
-      <!--<ion-icon [name]="item.icon" item-left></ion-icon>-->
-      {{customer.name}}
-      <!--<div class="item-note" item-right>
-        {{item.note}}
-      </div>-->
+      {{customer.name}} ({{customer.id ? "SYNCED" : "PENDING"}})
     </button>
   </ion-list>
-  <!--<div *ngIf="selectedItem" padding>
-    You navigated here from <b>{{selectedItem | json}}</b>
-  </div>-->
 </ion-content>

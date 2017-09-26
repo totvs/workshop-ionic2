@@ -1,7 +1,7 @@
+import { ApiClient } from './../../providers/api-client/api-client';
 import { Customer } from './../../models/customer.model';
 import { EditPage } from './../edit/edit';
 import { Http, HttpModule } from '@angular/http';
-import { ApiClient } from './../../providers/api-client';
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 
@@ -15,6 +15,8 @@ export class ListPage {
   selectedItem: any;
   icons: string[];
   customers: Customer[];
+  status: string;
+  pending: number;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public apiClient: ApiClient, public alertCtrl: AlertController) {
     // If we navigated to this page, we will have an item available as a nav param
@@ -35,7 +37,8 @@ export class ListPage {
   }
 
   ionViewDidEnter() {
-    this.readCustomers();
+    this.readCustomers(this);
+    // this.refreshData(this);
   }
 
   itemTapped(event, customer) {
@@ -45,27 +48,61 @@ export class ListPage {
     });
   }
 
-  readCustomers() {
-    var that = this;
+  // private mySubscription;
+  // private timerSubscription;
+
+  // refreshData(that) {
+  //   that.mySubscription = that.apiClient.getCustomers().subscribe(
+  //     (res) => {
+  //       let customers = res.data as Customer[];
+  //       that.customers = customers.sort(
+  //         (a, b) => {
+  //           if (a.name > b.name)
+  //             return 1;
+  //           if (a.name > b.name)
+  //             return -1;
+  //           else
+  //             return 0;
+  //         }
+  //       );
+  //       that.subscribeToData(that);
+  //     }
+  //   )
+  // }
+
+  // subscribeToData(that) {
+  //   that.timerSubscription = Observable.timer(5000).first().subscribe(() => that.refreshData(that));
+  // }
+
+  readCustomers(that) {
     // this.customers = [];
-    this.apiClient.getCustomers().subscribe(
-      (res) => {
-        let customers = res as Customer[];
-        that.customers = customers.sort(
-          (a, b) => {
-            if (a.name > b.name)
-              return 1;
-            if (a.name > b.name)
-              return -1;
-            else
-              return 0;
-          }
-        );
-      },
-      (err) => {
-        that.showErrorAlert(err);
-      }
-    );
+    console.log("Loading customers");
+    // that.syncQueue.count()
+    //   .then((count) => {
+    //     that.pending = count;
+        // that.apiClient.getCustomers().subscribe(
+        //   (res) => {
+        //     // that.status = res.status == "OFF" ? "OFFLINE" : "ONLINE";
+        //     // debugger;
+        //     let customers = res;
+        //     that.customers = customers.sort(
+        //       (a, b) => {
+        //         if (a.name > b.name)
+        //           return 1;
+        //         if (a.name < b.name)
+        //           return -1;
+        //         else
+        //           return 0;
+        //       }
+        //     );
+        //     // if (res.status == "OFF")
+        //     setTimeout(that.readCustomers, 2000, that);
+        //   },
+        //   (err) => {
+        //     that.showErrorAlert(err);
+        //   }
+        // );
+      // });
   }
 
   newCustomer() {
