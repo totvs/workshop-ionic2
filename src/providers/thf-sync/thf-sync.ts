@@ -27,13 +27,11 @@ export class THFSyncProvider {
 
 	prepare(schemas: THFModelSchema[], config?: any): Observable<any> {
 		this.schemas = schemas;
-
 		this.schemas.forEach(
 			(item) => {
 				this[item.name] = {};
 			}
 		);
-
 		this.config = config;
 		return Observable.of(null);
 	}
@@ -69,11 +67,10 @@ export class THFSyncProvider {
 			.expand(
 			(data) => {
 				let hasNext = data.hasNext;
-				if (hasNext) {
+				if (hasNext)
 					return this.getOnePage(schema, ++page);
-				} else {
+				else
 					return Observable.of();
-				}
 			})
 			.reduce(
 			(acc, obj) => {
