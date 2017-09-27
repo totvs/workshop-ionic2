@@ -3,6 +3,7 @@ import { THFSyncProvider } from './../../providers/thf-sync/thf-sync';
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -32,12 +33,10 @@ export class HomePage {
       pageSize: 20
     });
 
-    this.thfSync.prepare([customerSchema])
+    this.thfSync.prepare([customerSchema, userSchema])
       .subscribe(() => {
-        console.log("Subscribe prepare");
         this.thfSync.loadData()
           .subscribe((res) => {
-            console.log("Subscribe loadData");
             res.forEach(
               (el) => {
                 console.log('Entity: ' + el.entity + ' (' + el.data.length + ' loaded)');

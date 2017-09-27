@@ -8,7 +8,6 @@ import 'rxjs/add/operator/expand';
 import 'rxjs/add/operator/reduce';
 import 'rxjs/add/operator/zip';
 import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/forkJoin';
 /*
@@ -32,13 +31,29 @@ export class THFSyncProvider {
 		this.schemas.forEach(
 			(item) => {
 				this[item.name] = {};
-				// this[item.name].tests = this.tests;
 			}
 		);
 
 		this.config = config;
 		return Observable.of(null);
 	}
+
+	getOnePage(schema: THFModelSchema, page: number = 1): Observable<any> {
+		let params = [];
+		params.push('pageSize=' + schema.pageSize);
+		params.push('page=' + page);
+		let completeUrl = schema.urlApi + '?' + params.join('&');
+		return this._http.get(completeUrl)
+			.map((res) => {
+				return res.json();
+			})
+			.flatMap((res) => {
+				return this._storage.appendToArray(schema.name, res.items)
+					.then(() => {
+						return res;
+					});
+			});
+	};
 
 	loadData(): Observable<Array<{ entity: string, data: Array<any> }>> {
 		let loads = [];
@@ -49,35 +64,20 @@ export class THFSyncProvider {
 	}
 
 	loadEntityData(schema: THFModelSchema): Observable<{ entity: string, data: Array<any> }> {
-		const getPage = (url: string, entity: string, page: number = 1): Observable<Response> => {
-			let params = [];
-			params.push('pageSize=' + schema.pageSize);
-			params.push('page=' + page);
-			let completeUrl = url + '?' + params.join('&');
-			return this._http.get(completeUrl);
-		};
 		let page = 1;
-		return getPage(schema.urlApi, schema.name, page)
+		return this.getOnePage(schema, page)
 			.expand(
-			(res) => {
-				let data = res.json();
+			(data) => {
 				let hasNext = data.hasNext;
 				if (hasNext) {
-					return getPage(schema.urlApi, schema.name, ++page);
+					return this.getOnePage(schema, ++page);
 				} else {
 					return Observable.of();
 				}
 			})
-			.flatMap((res) => {
-				console.log("Entidade: " + schema.name + " dados: " + res.json().items.length);
-				return this._storage.appendToArray(schema.name, res.json().items).map(
-					() => {
-						return res;
-					})
-			})
 			.reduce(
 			(acc, obj) => {
-				acc.data = acc.data.concat(obj.json().items);
+				acc.data = acc.data.concat(obj.items);
 				return acc;
 			},
 			{
