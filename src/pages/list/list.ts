@@ -1,9 +1,10 @@
-import { ApiClient } from './../../providers/api-client/api-client';
+import { THFSyncProvider } from './../../providers/thf-sync/thf-sync';
 import { Customer } from './../../models/customer.model';
 import { EditPage } from './../edit/edit';
 import { Http, HttpModule } from '@angular/http';
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { THFModelSchema } from '../../models/thf-model-schema';
 
 @Component({
   selector: 'page-list',
@@ -12,110 +13,98 @@ import { NavController, NavParams, AlertController } from 'ionic-angular';
   ]
 })
 export class ListPage {
-  selectedItem: any;
   icons: string[];
   customers: Customer[];
-  status: string;
-  pending: number;
+  hasNext: boolean;
+  currentPage: number;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public apiClient: ApiClient, public alertCtrl: AlertController) {
-    // If we navigated to this page, we will have an item available as a nav param
-    this.selectedItem = navParams.get('item');
+  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private thfSync: THFSyncProvider) {
+    this.currentPage = 1;
+    this.hasNext = false;
+  }
 
-    // Let's populate this page with some filler content for funzies
-    this.icons = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
-      'american-football', 'boat', 'bluetooth', 'build'];
+  mapSchemas(): Promise<any> {
+    let customerSchema = new THFModelSchema({
+      urlApi: 'http://localhost:8200/api/v1/customers',
+      name: 'Customers',
+      fields: [
+        'id', 'name'
+      ],
+      pageSize: 20
+    });
 
-    // this.items = [];
-    // for (let i = 1; i < 11; i++) {
-    //   this.items.push({
-    //     title: 'Item ' + i,
-    //     note: 'This is item #' + i,
-    //     icon: this.icons[Math.floor(Math.random() * this.icons.length)]
-    //   });
-    // }
+    let userSchema = new THFModelSchema({
+      urlApi: 'http://localhost:8200/api/v1/users',
+      name: 'Users',
+      fields: [
+        'id', 'name', 'login'
+      ],
+      pageSize: 20
+    });
+
+    return this.thfSync.prepare([customerSchema, userSchema])
+      .then(() => {
+        console.log("Schemas mapped");
+      });
   }
 
   ionViewDidEnter() {
-    this.readCustomers(this);
-    // this.refreshData(this);
+    this.mapSchemas()
+      .then(() => {
+        this.getData();
+      });
   }
 
   itemTapped(event, customer) {
-    // That's right, we're pushing to ourselves!
-    this.navCtrl.push(EditPage, {
-      customer: customer
-    });
+    // // That's right, we're pushing to ourselves!
+    // this.navCtrl.push(EditPage, {
+    //   customer: customer
+    // });
   }
 
-  // private mySubscription;
-  // private timerSubscription;
+  getData() {
+    this.thfSync.getModel('Cusodsostomers').findAll(this.currentPage, 10, "-name")
+    // this.thfSync['Customers'].findAll(this.currentPage, 10, "-name")
+      .then((data) => {
+        this.customers = data.items;
+        this.hasNext = data.hasNext;
+      });
+    ;
+    // this.thfSync["Users"]
+    // this.thfSync.getModel('Customers').findAll(this.currentPage, 10, "-name")
+    // .then((data) => {
+    //   this.customers = data.items;
+    //   this.hasNext = data.hasNext;
+    // });
 
-  // refreshData(that) {
-  //   that.mySubscription = that.apiClient.getCustomers().subscribe(
-  //     (res) => {
-  //       let customers = res.data as Customer[];
-  //       that.customers = customers.sort(
-  //         (a, b) => {
-  //           if (a.name > b.name)
-  //             return 1;
-  //           if (a.name > b.name)
-  //             return -1;
-  //           else
-  //             return 0;
-  //         }
-  //       );
-  //       that.subscribeToData(that);
-  //     }
-  //   )
-  // }
-
-  // subscribeToData(that) {
-  //   that.timerSubscription = Observable.timer(5000).first().subscribe(() => that.refreshData(that));
-  // }
-
-  readCustomers(that) {
-    // this.customers = [];
-    console.log("Loading customers");
-    // that.syncQueue.count()
-    //   .then((count) => {
-    //     that.pending = count;
-        // that.apiClient.getCustomers().subscribe(
-        //   (res) => {
-        //     // that.status = res.status == "OFF" ? "OFFLINE" : "ONLINE";
-        //     // debugger;
-        //     let customers = res;
-        //     that.customers = customers.sort(
-        //       (a, b) => {
-        //         if (a.name > b.name)
-        //           return 1;
-        //         if (a.name < b.name)
-        //           return -1;
-        //         else
-        //           return 0;
-        //       }
-        //     );
-        //     // if (res.status == "OFF")
-        //     setTimeout(that.readCustomers, 2000, that);
-        //   },
-        //   (err) => {
-        //     that.showErrorAlert(err);
-        //   }
-        // );
-      // });
+    // this.thfSync['oij'].findAll(this.currentPage, 10, "-name")
+    //   .then((data) => {
+    //     this.customers = data.items;
+    //     this.hasNext = data.hasNext;
+    //   });
   }
 
   newCustomer() {
     this.navCtrl.push(EditPage, {});
   }
 
-  showErrorAlert(msg) {
-    let alert = this.alertCtrl.create({
-      title: 'Erro',
-      subTitle: 'Erro: ' + msg,
-      buttons: ['OK']
-    });
-    alert.present();
+  nextPage() {
+    this.currentPage++;
+    this.getData();
   }
+
+  prevPage() {
+    this.currentPage--;
+    this.getData();
+  }
+
+  // showErrorAlert(msg) {
+  //   let alert = this.alertCtrl.create({
+  //     title: 'Erro',
+  //     subTitle: 'Erro: ' + msg,
+  //     buttons: ['OK']
+  //   });
+  //   alert.present();
+  // }
 
 }

@@ -12,11 +12,18 @@
   <ion-icon name="add"></ion-icon>
   Novo Cliente
 </button>
-<ion-label color="dark">SERVER: {{status}}</ion-label>
-<ion-label color="dark">Fila: {{pending}}</ion-label>
+
   <ion-list>
     <button ion-item *ngFor="let customer of customers" (click)="itemTapped($event, customer)">
-      {{customer.name}} ({{customer.id ? "SYNCED" : "PENDING"}})
+      {{customer.name}}
     </button>
   </ion-list>
+
+  <button ion-button (click)="prevPage()" [disabled]="currentPage == 1">
+    << Anterior
+  </button>  
+&nbsp;&nbsp;
+  <button ion-button (click)="nextPage()" [disabled]="!hasNext">
+    Próxima >>
+  </button>  
 </ion-content>

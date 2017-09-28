@@ -34,15 +34,17 @@ export class HomePage {
     });
 
     this.thfSync.prepare([customerSchema, userSchema])
-      .subscribe(() => {
-        this.thfSync.loadData()
-          .subscribe((res) => {
-            res.forEach(
-              (el) => {
-                console.log('Entity: ' + el.entity + ' (' + el.data.length + ' loaded)');
-              }
-            )
-          });
+      .then(() => {
+        console.log("Schemas ready");
+        // this.thfSync.loadData()
+        //   .subscribe((res) => {
+        //     console.log("Retorno subscribe");
+        //     res.forEach(
+        //       (el) => {
+        //         console.log('Entity: ' + el.entity + ' (' + el.data.length + ' loaded)');
+        //       }
+        //     )
+        //   });
       });
   } 
 }
