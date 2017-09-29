@@ -51,7 +51,19 @@ export class ListPage {
   ionViewDidEnter() {
     this.mapSchemas()
       .then(() => {
+
         this.getData();
+
+        this.thfSync.getModel('Customers')
+        .findOne({name: 'Cliente 02'})
+        .exec()
+        .then((xxx) => {
+          console.log('Veio: ', xxx);
+        });
+
+
+
+        
       });
   }
 
@@ -63,8 +75,12 @@ export class ListPage {
   }
 
   getData() {
-    this.thfSync.getModel('Cusodsostomers').findAll(this.currentPage, 10, "-name")
-    // this.thfSync['Customers'].findAll(this.currentPage, 10, "-name")
+    this.thfSync.getModel('Customers').find()
+      .page(this.currentPage)
+      .sort("name")
+      .pageSize(10)
+      .select("id name -password")
+      .exec()
       .then((data) => {
         this.customers = data.items;
         this.hasNext = data.hasNext;
