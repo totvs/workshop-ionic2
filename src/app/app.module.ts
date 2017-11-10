@@ -1,6 +1,6 @@
+import { THFSyncService } from '@totvs/thf-mobile/app/services/thf-sync/thf-sync.service';
 import { Util } from './../providers/util/util';
 // import { SyncQueue } from './../providers/sync_queue/sync_queue';
-import { THFStorageService } from './../providers/thf-storage/thf-storage';
 import { EditPage } from './../pages/edit/edit';
 import { HttpModule } from '@angular/http';
 import { ApiClient } from './../providers/api-client/api-client';
@@ -15,7 +15,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { IonicStorageModule } from '@ionic/storage';
 // import { RequestProvider } from '../providers/request/request';
-import { THFSyncProvider } from '../providers/thf-sync/thf-sync';
+import { THFStorageService } from '@totvs/thf-mobile/app/services/thf-storage/thf-storage.service';
 
 @NgModule({
   declarations: [
@@ -51,7 +51,7 @@ import { THFSyncProvider } from '../providers/thf-sync/thf-sync';
     Util,
     ApiClient,
     // RequestProvider,
-    THFSyncProvider
+    THFSyncService
 
   ]
 })

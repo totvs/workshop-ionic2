@@ -24,6 +24,7 @@
         "@ionic-native/splash-screen": "3.6.1",
         "@ionic-native/status-bar": "3.6.1",
         "@ionic/storage": "^2.0.1",
+        "@totvs/thf-mobile": "file:../../TOTVS/totvstfs/thf-mobile/totvs-thf-mobile-12.1.18-alpha.6.tgz",
         "angular2-uuid": "^1.1.1",
         "cordova-sqlite-storage": "^2.0.4",
         "ionic-angular": "3.1.1",

@@ -16,16 +16,11 @@
       <ion-input type="text" [(ngModel)]="customer.name"></ion-input>
     </ion-item>
 
-    <ion-item>
-      <ion-label floating>Endereço</ion-label>
-      <ion-input type="text" [(ngModel)]="customer.address"></ion-input>
-    </ion-item>
-
   </ion-list>
 
   <div padding>
     <button ion-button color="primary" (click)="save();" block>Salvar</button>
-    <button *ngIf="customer.id" ion-button color="secondary" (click)="delete();" block>Excluir</button>
+    <button *ngIf="customer.id || customer.SyncInternalId" ion-button color="secondary" (click)="delete();" block>Excluir</button>
   </div>
 
 </ion-content>

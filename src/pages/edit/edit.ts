@@ -1,4 +1,4 @@
-import { ApiClient } from './../../providers/api-client/api-client';
+import { THFSyncService } from '@totvs/thf-mobile/app/services/thf-sync/thf-sync.service';
 import { Customer } from './../../models/customer.model';
 import { Http, HttpModule } from '@angular/http';
 import { Component } from '@angular/core';
@@ -12,7 +12,7 @@ import { NavController, NavParams, AlertController, ViewController } from 'ionic
 export class EditPage {
   customer: Customer = new Customer();
   title: string = '';
-  constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public apiClient: ApiClient, public alertCtrl: AlertController) {
+  constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public thfSync: THFSyncService, public alertCtrl: AlertController) {
     if (navParams.get('customer')) {
       this.title = "Edição";
       this.customer = navParams.get('customer') as Customer;
@@ -22,6 +22,28 @@ export class EditPage {
   }
 
   save() {
+    const model = this.thfSync.getModel("Customers");
+    model.create(this.customer)
+      .then(
+      () => {
+        this.showAlert('Dados salvos com sucesso!');
+      }
+      )
+    // if (this.customer.id || (<any>this.customer).SyncInternalId) {
+    //   model.update(this.customer)
+    //     .then(
+    //     () => {
+    //       this.showAlert('Dados salvos com sucesso!');
+    //     }
+    //     )
+    // } else {
+    //   this.thfSync.getModel("Customers").create(
+    //     this.customer
+    //   ).then(() => {
+    //     this.showAlert('Dados salvos com sucesso!');
+    //   });
+    // }
+
     // console.log('item: ', this.customer);
     // let that = this;
     // this.apiClient.saveCustomer(this.customer).subscribe(
@@ -37,39 +59,40 @@ export class EditPage {
   }
 
   delete() {
-    // this.showConfirm();
+    this.showConfirm();
   }
 
 
-  // showConfirm() {
-  //   var that = this;
-  //   let confirm = this.alertCtrl.create({
-  //     title: 'Exclusão',
-  //     message: 'Tem certeza que deseja excluir?',
-  //     buttons: [
-  //       {
-  //         text: 'Não',
-  //         handler: () => {
-  //           // console.log('Disagree clicked');
-  //         }
-  //       },
-  //       {
-  //         text: 'Sim',
-  //         handler: () => {
-  //           that.apiClient.deleteCustomer(that.customer.id).subscribe(
-  //             (res) => {
-  //               that.showAlert('Excluído com sucesso!');
-  //             },
-  //             (err) => {
-  //               that.showErrorAlert(err);
-  //             }
-  //           )
-  //         }
-  //       }
-  //     ]
-  //   });
-  //   confirm.present();
-  // }
+  showConfirm() {
+    var that = this;
+    const model = this.thfSync.getModel("Customers");
+    let confirm = this.alertCtrl.create({
+      title: 'Exclusão',
+      message: 'Tem certeza que deseja excluir?',
+      buttons: [
+        {
+          text: 'Não',
+          handler: () => {
+            // console.log('Disagree clicked');
+          }
+        },
+        {
+          text: 'Sim',
+          handler: () => {
+            model.remove(that.customer.id || (<any>that.customer).SyncInternalId)
+              .then(
+              (res) => {
+                that.showAlert('Excluído com sucesso!');
+              },
+              (err) => {
+                that.showErrorAlert(err);
+              })
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
 
 
   showAlert(msg) {

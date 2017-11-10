@@ -1,5 +1,5 @@
-import { THFModelSchema } from './../../models/thf-model-schema';
-import { THFSyncProvider } from './../../providers/thf-sync/thf-sync';
+import { THFSyncService } from '@totvs/thf-mobile/app/services/thf-sync/thf-sync.service';
+import { THFModelSchema } from '@totvs/thf-mobile/app/models/thf-model-schema';
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
@@ -10,7 +10,7 @@ import { NavController } from 'ionic-angular';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController, private thfSync: THFSyncProvider) {
+  constructor(public navCtrl: NavController, private thfSync: THFSyncService) {
     this.buildSchemas();
   }
 
