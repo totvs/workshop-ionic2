@@ -23,12 +23,18 @@ export class EditPage {
 
   save() {
     const model = this.thfSync.getModel("Customers");
-    model.create(this.customer)
-      .then(
-      () => {
+
+    model.save(this.customer)
+      .then(() => {
         this.showAlert('Dados salvos com sucesso!');
-      }
-      )
+      });
+
+    // model.create(this.customer)
+    //   .then(
+    //   () => {
+    //     this.showAlert('Dados salvos com sucesso!');
+    //   }
+    //   )
     // if (this.customer.id || (<any>this.customer).SyncInternalId) {
     //   model.update(this.customer)
     //     .then(
@@ -79,7 +85,7 @@ export class EditPage {
         {
           text: 'Sim',
           handler: () => {
-            model.remove(that.customer.id || (<any>that.customer).SyncInternalId)
+            model.remove(that.customer)
               .then(
               (res) => {
                 that.showAlert('Excluído com sucesso!');
