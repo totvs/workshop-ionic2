@@ -1,4 +1,5 @@
 import { THFStorageService } from '@totvs/thf-mobile/app/services/thf-storage/thf-storage.service';
+import { Network } from '@ionic-native/network';
 import { THFSyncService } from '@totvs/thf-mobile/app/services/thf-sync/thf-sync.service';
 import { Customer } from './../../models/customer.model';
 import { EditPage } from './../edit/edit';
@@ -6,22 +7,42 @@ import { Http, HttpModule } from '@angular/http';
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { THFModelSchema } from '@totvs/thf-mobile/app/models/thf-model-schema';
+import { THFEventSourcing } from '@totvs/thf-mobile/app/models/thf-event-sourcing';
 
 @Component({
   selector: 'page-list',
   templateUrl: 'list.html',
-  providers: [Http, HttpModule
-  ]
+  providers: [Http, HttpModule, Network]
 })
 export class ListPage {
   icons: string[];
   customers: Customer[];
   hasNext: boolean;
   currentPage: number;
+  eventSourcing: THFEventSourcing;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private thfSync: THFSyncService, private thfStorage: THFStorageService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private thfSync: THFSyncService, private thfStorage: THFStorageService, private network: Network) {
     this.currentPage = 1;
     this.hasNext = false;
+    let disconnectSubscription = this.network.onDisconnect().subscribe(() => {
+      console.log('network was disconnected :-(');
+    });
+
+    this.eventSourcing = new THFEventSourcing(thfStorage);
+
+    let connectSubscription = this.network.onConnect().subscribe(() => {
+      console.log('network connected!');
+      // We just got a connection but we need to wait briefly
+      // before we determine the connection type. Might need to wait.
+      // prior to doing any api requests as well.
+      // setTimeout(() => {
+      //   if (this.network.type === 'wifi') {
+      //     console.log('we got a wifi connection, woohoo!');
+      //   }
+      // }, 3000);
+    });
+
+
   }
 
   mapSchemas(): Promise<any> {
@@ -117,5 +138,13 @@ export class ListPage {
   //   });
   //   alert.present();
   // }
+
+  syncSend() {
+    this.eventSourcing.syncSend();
+  }
+
+  syncGet() {
+    
+  }
 
 }

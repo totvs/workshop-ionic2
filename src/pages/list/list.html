@@ -1,29 +1,39 @@
 <ion-header>
-  <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>Clientes</ion-title>
-  </ion-navbar>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Clientes</ion-title>
+    </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <button ion-button icon-left (click)="newCustomer()">
-  <ion-icon name="add"></ion-icon>
-  Novo Cliente
-</button>
-
-  <ion-list>
-    <button ion-item *ngFor="let customer of customers" (click)="itemTapped($event, customer)">
-      {{customer.name}}
+    <button ion-button icon-left (click)="newCustomer()">
+        <ion-icon name="add"></ion-icon>
+        Novo
     </button>
-  </ion-list>
 
-  <button ion-button (click)="prevPage()" [disabled]="currentPage == 1">
-    << Anterior
-  </button>  
-&nbsp;&nbsp;
-  <button ion-button (click)="nextPage()" [disabled]="!hasNext">
-    Próxima >>
-  </button>  
+    <button ion-button icon-left (click)="syncSend()">
+        <ion-icon name="ios-trending-up"></ion-icon>
+        Send
+    </button>
+
+    <button ion-button icon-left (click)="syncGet()">
+        <ion-icon name="ios-trending-down"></ion-icon>
+        Get
+    </button>
+
+    <ion-list>
+        <button ion-item *ngFor="let customer of customers" (click)="itemTapped($event, customer)">
+            {{customer.name}}
+        </button>
+        <ion-label *ngIf="!customers || customers.length == 0">Nenhum cliente encontrado</ion-label>
+    </ion-list>
+
+    <button ion-button (click)="prevPage()" [disabled]="currentPage == 1">
+        << Anterior </button>
+            &nbsp;&nbsp;
+            <button ion-button (click)="nextPage()" [disabled]="!hasNext">
+                Próxima >>
+            </button>
 </ion-content>
