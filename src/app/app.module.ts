@@ -2,7 +2,7 @@ import { THFSyncService } from '@totvs/thf-mobile/app/services/thf-sync/thf-sync
 import { Util } from './../providers/util/util';
 // import { SyncQueue } from './../providers/sync_queue/sync_queue';
 import { EditPage } from './../pages/edit/edit';
-import { HttpModule } from '@angular/http';
+import { HttpModule, Http } from '@angular/http';
 import { ApiClient } from './../providers/api-client/api-client';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
@@ -52,7 +52,6 @@ import { THFStorageService } from '@totvs/thf-mobile/app/services/thf-storage/th
     ApiClient,
     // RequestProvider,
     THFSyncService
-
   ]
 })
 export class AppModule { }

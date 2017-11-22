@@ -12,7 +12,7 @@ import { THFEventSourcing } from '@totvs/thf-mobile/app/models/thf-event-sourcin
 @Component({
   selector: 'page-list',
   templateUrl: 'list.html',
-  providers: [Http, HttpModule, Network]
+  providers: [Network]
 })
 export class ListPage {
   icons: string[];
@@ -21,14 +21,14 @@ export class ListPage {
   currentPage: number;
   eventSourcing: THFEventSourcing;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private thfSync: THFSyncService, private thfStorage: THFStorageService, private network: Network) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private thfSync: THFSyncService, private thfStorage: THFStorageService, private network: Network, private _http: Http) {
     this.currentPage = 1;
     this.hasNext = false;
     let disconnectSubscription = this.network.onDisconnect().subscribe(() => {
       console.log('network was disconnected :-(');
     });
 
-    this.eventSourcing = new THFEventSourcing(thfStorage);
+    this.eventSourcing = new THFEventSourcing(this.thfStorage, this._http);
 
     let connectSubscription = this.network.onConnect().subscribe(() => {
       console.log('network connected!');
@@ -47,7 +47,8 @@ export class ListPage {
 
   mapSchemas(): Promise<any> {
     let customerSchema = new THFModelSchema({
-      urlApi: 'http://localhost:8200/api/v1/customers',
+      getUrlApi: 'http://localhost:8200/api/v1/customers',
+      diffUrlApi: 'http://localhost:8200/api/v1/customers/diff',
       name: 'Customers',
       fields: [
         'id', 'name'
@@ -56,7 +57,8 @@ export class ListPage {
     });
 
     let userSchema = new THFModelSchema({
-      urlApi: 'http://localhost:8200/api/v1/users',
+      getUrlApi: 'http://localhost:8200/api/v1/users',
+      diffUrlApi: 'http://localhost:8200/api/v1/users/diff',
       name: 'Users',
       fields: [
         'id', 'name', 'login'
