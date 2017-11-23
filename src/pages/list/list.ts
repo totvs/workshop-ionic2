@@ -142,7 +142,10 @@ export class ListPage {
   // }
 
   syncSend() {
-    this.eventSourcing.syncSend();
+    this.eventSourcing.syncSend()
+    .then(() => {
+      console.log('voltou do sync send');
+    });
   }
 
   syncGet() {
