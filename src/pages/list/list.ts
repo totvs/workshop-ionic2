@@ -8,6 +8,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { THFModelSchema } from '@totvs/thf-mobile/app/models/thf-model-schema';
 import { THFEventSourcing } from '@totvs/thf-mobile/app/models/thf-event-sourcing';
+import { sprintf } from 'sprintf-js';
 
 @Component({
   selector: 'page-list',
@@ -53,7 +54,8 @@ export class ListPage {
       fields: [
         'id', 'name'
       ],
-      pageSize: 20
+      pageSize: 20,
+      deletedInfo: 'deleted'
     });
 
     let userSchema = new THFModelSchema({
@@ -63,7 +65,8 @@ export class ListPage {
       fields: [
         'id', 'name', 'login'
       ],
-      pageSize: 20
+      pageSize: 20,
+      deletedInfo: 'deleted'
     });
 
     return this.thfSync.prepare([customerSchema, userSchema])
@@ -145,11 +148,16 @@ export class ListPage {
     this.eventSourcing.syncSend()
     .then(() => {
       console.log('voltou do sync send');
+      this.getData();
     });
   }
 
   syncGet() {
-    
+    this.eventSourcing.syncGet()
+    .then(() => {
+      console.log('voltou do sync send');
+      this.getData();
+    });
   }
 
 }
