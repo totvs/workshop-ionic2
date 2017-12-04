@@ -155,7 +155,7 @@ export class ListPage {
   syncGet() {
     this.eventSourcing.syncGet()
     .then(() => {
-      console.log('voltou do sync send');
+      console.log('voltou do sync get');
       this.getData();
     });
   }

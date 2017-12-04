@@ -2,8 +2,7 @@ import { THFSyncService } from '@totvs/thf-mobile/app/services/thf-sync/thf-sync
 import { Util } from './../providers/util/util';
 // import { SyncQueue } from './../providers/sync_queue/sync_queue';
 import { EditPage } from './../pages/edit/edit';
-import { HttpModule, Http } from '@angular/http';
-import { ApiClient } from './../providers/api-client/api-client';
+import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -14,7 +13,6 @@ import { ListPage } from '../pages/list/list';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { IonicStorageModule } from '@ionic/storage';
-// import { RequestProvider } from '../providers/request/request';
 import { THFStorageService } from '@totvs/thf-mobile/app/services/thf-storage/thf-storage.service';
 
 @NgModule({
@@ -49,7 +47,6 @@ import { THFStorageService } from '@totvs/thf-mobile/app/services/thf-storage/th
     // SyncQueue,
     THFStorageService,
     Util,
-    ApiClient,
     // RequestProvider,
     THFSyncService
   ]
