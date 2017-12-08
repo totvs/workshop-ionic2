@@ -53,7 +53,8 @@ export class ListPage {
         'id', 'name'
       ],
       pageSize: 20,
-      deletedInfo: 'deleted'
+      deletedInfo: 'deleted',
+      idField: 'id'
     });
 
     let userSchema = new THFModelSchema({
@@ -64,7 +65,8 @@ export class ListPage {
         'id', 'name', 'login'
       ],
       pageSize: 20,
-      deletedInfo: 'deleted'
+      deletedInfo: 'deleted',
+      idField: 'id'
     });
 
     return this.thfSync.prepare([customerSchema, userSchema])
