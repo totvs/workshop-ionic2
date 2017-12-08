@@ -14,6 +14,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { IonicStorageModule } from '@ionic/storage';
 import { THFStorageService } from '@totvs/thf-mobile/app/services/thf-storage/thf-storage.service';
+import { THFEventSourcingService } from '@totvs/thf-mobile/app/services/thf-event-sourcing/thf-event-sourcing.service';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { THFStorageService } from '@totvs/thf-mobile/app/services/thf-storage/th
     THFStorageService,
     Util,
     // RequestProvider,
-    THFSyncService
+    THFSyncService,
+    THFEventSourcingService
   ]
 })
 export class AppModule { }

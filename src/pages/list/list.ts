@@ -3,12 +3,10 @@ import { Network } from '@ionic-native/network';
 import { THFSyncService } from '@totvs/thf-mobile/app/services/thf-sync/thf-sync.service';
 import { Customer } from './../../models/customer.model';
 import { EditPage } from './../edit/edit';
-import { Http, HttpModule } from '@angular/http';
+import { Http } from '@angular/http';
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, ToastController } from 'ionic-angular';
 import { THFModelSchema } from '@totvs/thf-mobile/app/models/thf-model-schema';
-import { THFEventSourcing } from '@totvs/thf-mobile/app/models/thf-event-sourcing';
-import { sprintf } from 'sprintf-js';
 
 @Component({
   selector: 'page-list',
@@ -20,28 +18,28 @@ export class ListPage {
   customers: Customer[];
   hasNext: boolean;
   currentPage: number;
-  eventSourcing: THFEventSourcing;
+  // eventSourcing: THFEventSourcing;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private thfSync: THFSyncService, private thfStorage: THFStorageService, private network: Network, private _http: Http) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private toastCtrl: ToastController, private thfSync: THFSyncService, private thfStorage: THFStorageService, private network: Network, private _http: Http, ) {
     this.currentPage = 1;
     this.hasNext = false;
-    let disconnectSubscription = this.network.onDisconnect().subscribe(() => {
-      console.log('network was disconnected :-(');
-    });
+    // let disconnectSubscription = this.network.onDisconnect().subscribe(() => {
+    //   console.log('network was disconnected :-(');
+    // });
 
-    this.eventSourcing = new THFEventSourcing(this.thfStorage, this._http);
+    // this.eventSourcing = new THFEventSourcing(this.thfStorage, this._http);
 
-    let connectSubscription = this.network.onConnect().subscribe(() => {
-      console.log('network connected!');
-      // We just got a connection but we need to wait briefly
-      // before we determine the connection type. Might need to wait.
-      // prior to doing any api requests as well.
-      // setTimeout(() => {
-      //   if (this.network.type === 'wifi') {
-      //     console.log('we got a wifi connection, woohoo!');
-      //   }
-      // }, 3000);
-    });
+    // let connectSubscription = this.network.onConnect().subscribe(() => {
+    //   console.log('network connected!');
+    //   // We just got a connection but we need to wait briefly
+    //   // before we determine the connection type. Might need to wait.
+    //   // prior to doing any api requests as well.
+    //   // setTimeout(() => {
+    //   //   if (this.network.type === 'wifi') {
+    //   //     console.log('we got a wifi connection, woohoo!');
+    //   //   }
+    //   // }, 3000);
+    // });
 
 
   }
@@ -144,20 +142,38 @@ export class ListPage {
   //   alert.present();
   // }
 
-  syncSend() {
-    this.eventSourcing.syncSend()
+  sync() {
+    // console.log(this.thfSync);
+    this.thfSync.sync()
     .then(() => {
-      console.log('voltou do sync send');
       this.getData();
+      let toast = this.toastCtrl.create({
+        message: 'Data synced',
+        duration: 2000,
+        position: 'bottom'
+      });
+      toast.present();
+      // let alert = this.alertCtrl.create({
+      //   title: 'Sync',
+      //   subTitle: 'Sync OK',
+      //   buttons: ['OK']
+      // });
+      // alert.present();
+      // console.log("voltou");
     });
+    // this.eventSourcing.syncSend()
+    // .then(() => {
+    //   console.log('voltou do sync send');
+    //   this.getData();
+    // });
   }
 
-  syncGet() {
-    this.eventSourcing.syncGet()
-    .then(() => {
-      console.log('voltou do sync get');
-      this.getData();
-    });
-  }
+  // syncGet() {
+  //   this.eventSourcing.syncGet()
+  //   .then(() => {
+  //     console.log('voltou do sync get');
+  //     this.getData();
+  //   });
+  // }
 
 }

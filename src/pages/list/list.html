@@ -13,15 +13,15 @@
         Novo
     </button>
 
-    <button ion-button icon-left (click)="syncSend()">
-        <ion-icon name="ios-trending-up"></ion-icon>
-        Send
+    <button ion-button icon-left (click)="sync()">
+        <ion-icon name="ion-loop"></ion-icon>
+        Sync
     </button>
 
-    <button ion-button icon-left (click)="syncGet()">
+    <!-- <button ion-button icon-left (click)="syncGet()">
         <ion-icon name="ios-trending-down"></ion-icon>
         Get
-    </button>
+    </button> -->
 
     <ion-list>
         <button ion-item *ngFor="let customer of customers" (click)="itemTapped($event, customer)">
