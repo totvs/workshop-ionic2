@@ -7,6 +7,8 @@ import { Http } from '@angular/http';
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, ToastController } from 'ionic-angular';
 import { THFModelSchema } from '@totvs/thf-mobile/app/models/thf-model-schema';
+import { THFSyncConfig } from '@totvs/thf-mobile/app/models/thf-sync-config';
+import { THFNetworkType } from '@totvs/thf-mobile/app/enums/thf-network-type.enum';
 
 @Component({
   selector: 'page-list',
@@ -46,30 +48,30 @@ export class ListPage {
 
   mapSchemas(): Promise<any> {
     let customerSchema = new THFModelSchema({
-      getUrlApi: 'http://localhost:8200/api/v1/customers',
-      diffUrlApi: 'http://localhost:8200/api/v1/customers/diff',
+      getUrlApi: 'http://10.172.45.159:8200/api/v1/customers',
+      diffUrlApi: 'http://10.172.45.159:8200/api/v1/customers/diff',
       name: 'Customers',
       fields: [
         'id', 'name'
       ],
       pageSize: 20,
-      deletedInfo: 'deleted',
+      deletedField: 'deleted',
       idField: 'id'
     });
 
     let userSchema = new THFModelSchema({
-      getUrlApi: 'http://localhost:8200/api/v1/users',
-      diffUrlApi: 'http://localhost:8200/api/v1/users/diff',
+      getUrlApi: 'http://10.172.45.159:8200/api/v1/users',
+      diffUrlApi: 'http://10.172.45.159:8200/api/v1/users/diff',
       name: 'Users',
       fields: [
         'id', 'name', 'login'
       ],
       pageSize: 20,
-      deletedInfo: 'deleted',
+      deletedField: 'deleted',
       idField: 'id'
     });
 
-    return this.thfSync.prepare([customerSchema, userSchema])
+    return this.thfSync.prepare([customerSchema], new THFSyncConfig(THFNetworkType._3g, 60))
       .then(() => {
         console.log("Schemas mapped");
       });
@@ -87,7 +89,7 @@ export class ListPage {
         //     }
         //   )
         //   this.getData();
-        // });        
+        // });
         this.getData();
       });
   }
