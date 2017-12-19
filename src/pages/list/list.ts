@@ -48,8 +48,8 @@ export class ListPage {
 
   mapSchemas(): Promise<any> {
     let customerSchema = new THFModelSchema({
-      getUrlApi: 'http://10.172.45.159:8200/api/v1/customers',
-      diffUrlApi: 'http://10.172.45.159:8200/api/v1/customers/diff',
+      getUrlApi: 'http://localhost:8200/api/v1/customers',
+      diffUrlApi: 'http://localhost:8200/api/v1/customers/diff',
       name: 'Customers',
       fields: [
         'id', 'name'
@@ -59,19 +59,19 @@ export class ListPage {
       idField: 'id'
     });
 
-    let userSchema = new THFModelSchema({
-      getUrlApi: 'http://10.172.45.159:8200/api/v1/users',
-      diffUrlApi: 'http://10.172.45.159:8200/api/v1/users/diff',
-      name: 'Users',
-      fields: [
-        'id', 'name', 'login'
-      ],
-      pageSize: 20,
-      deletedField: 'deleted',
-      idField: 'id'
-    });
+    // let userSchema = new THFModelSchema({
+    //   getUrlApi: 'http://10.172.45.159:8200/api/v1/users',
+    //   diffUrlApi: 'http://10.172.45.159:8200/api/v1/users/diff',
+    //   name: 'Users',
+    //   fields: [
+    //     'id', 'name', 'login'
+    //   ],
+    //   pageSize: 20,
+    //   deletedField: 'deleted',
+    //   idField: 'id'
+    // });
 
-    return this.thfSync.prepare([customerSchema], new THFSyncConfig(THFNetworkType._3g, 60))
+    return this.thfSync.prepare([customerSchema], new THFSyncConfig(THFNetworkType._3g, 10))
       .then(() => {
         console.log("Schemas mapped");
       });
@@ -90,6 +90,9 @@ export class ListPage {
         //   )
         //   this.getData();
         // });
+        this.getData();
+      });
+      this.thfSync.onSync().subscribe(() => {
         this.getData();
       });
   }
@@ -137,47 +140,21 @@ export class ListPage {
     this.getData();
   }
 
-  // showErrorAlert(msg) {
-  //   let alert = this.alertCtrl.create({
-  //     title: 'Erro',
-  //     subTitle: 'Erro: ' + msg,
-  //     buttons: ['OK']
-  //   });
-  //   alert.present();
-  // }
-
   sync() {
-    // console.log(this.thfSync);
+    console.log("Syncing");
     this.thfSync.sync()
     .then(() => {
       this.getData();
+      console.log("Synced");
       let toast = this.toastCtrl.create({
         message: 'Data synced',
         duration: 2000,
         position: 'bottom'
       });
       toast.present();
-      // let alert = this.alertCtrl.create({
-      //   title: 'Sync',
-      //   subTitle: 'Sync OK',
-      //   buttons: ['OK']
-      // });
-      // alert.present();
-      // console.log("voltou");
+    })
+    .catch((err) => {
+      console.log("Error on sync: ", err);
     });
-    // this.eventSourcing.syncSend()
-    // .then(() => {
-    //   console.log('voltou do sync send');
-    //   this.getData();
-    // });
   }
-
-  // syncGet() {
-  //   this.eventSourcing.syncGet()
-  //   .then(() => {
-  //     console.log('voltou do sync get');
-  //     this.getData();
-  //   });
-  // }
-
 }
