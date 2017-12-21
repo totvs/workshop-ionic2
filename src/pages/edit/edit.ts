@@ -28,40 +28,6 @@ export class EditPage {
       .then(() => {
         this.showAlert('Dados salvos com sucesso!');
       });
-
-    // model.create(this.customer)
-    //   .then(
-    //   () => {
-    //     this.showAlert('Dados salvos com sucesso!');
-    //   }
-    //   )
-    // if (this.customer.id || (<any>this.customer).SyncInternalId) {
-    //   model.update(this.customer)
-    //     .then(
-    //     () => {
-    //       this.showAlert('Dados salvos com sucesso!');
-    //     }
-    //     )
-    // } else {
-    //   this.thfSync.getModel("Customers").create(
-    //     this.customer
-    //   ).then(() => {
-    //     this.showAlert('Dados salvos com sucesso!');
-    //   });
-    // }
-
-    // console.log('item: ', this.customer);
-    // let that = this;
-    // this.apiClient.saveCustomer(this.customer).subscribe(
-    //   (res) => {
-    //     console.log('res: ', res);
-    //     that.showAlert('Dados salvos com sucesso!');
-    //   },
-    //   (err) => {
-    //     that.showErrorAlert(err);
-    //     // console.log('err: ', err);
-    //   }
-    // )
   }
 
   delete() {

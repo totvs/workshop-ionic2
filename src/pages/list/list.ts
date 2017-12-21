@@ -48,8 +48,8 @@ export class ListPage {
 
   mapSchemas(): Promise<any> {
     let customerSchema = new THFModelSchema({
-      getUrlApi: 'http://localhost:8200/api/v1/customers',
-      diffUrlApi: 'http://localhost:8200/api/v1/customers/diff',
+      getUrlApi: 'http://thfservices.totvs.com.br/customer-api/api/v1/customers',
+      diffUrlApi: 'http://thfservices.totvs.com.br/customer-api/api/v1/customers/diff',
       name: 'Customers',
       fields: [
         'id', 'name'
